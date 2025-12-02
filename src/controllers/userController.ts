@@ -11,9 +11,9 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 
 // POST /api/users
 export const registerUser = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const userData = req.body;
 
-  const user = await userService.registerUser(name, email, password);
+  const user = await userService.registerUser(userData);
 
   res.status(201).json({
     _id: user._id,

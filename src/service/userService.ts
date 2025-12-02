@@ -5,15 +5,21 @@ export class UserService {
     return await User.find({});
   }
 
-  async registerUser(name: string, email: string, password: string): Promise<IUser> {
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      throw new Error("User already exists");
-    }
+  async registerUser(userData: any): Promise<IUser> {
+  // Destructure the required fields
+  const { name, email, password } = userData;
 
-    const user = await User.create({ name, email, password });
-    return user;
+  // Check if user exists
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    throw new Error("User already exists");
   }
+
+  // Create user
+  const user = await User.create({ name, email, password });
+
+  return user;
+}
 }
 
 export default new UserService();
