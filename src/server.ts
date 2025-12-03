@@ -1,27 +1,22 @@
-import express, { Application } from "express";
+import express from "express";
 import dotenv from "dotenv";
-import userRouter from "./routes/userRoutes";
-import { errorHandler, notFound } from "./middleware/errorMiddleware";
+import sequelize from "./config/db";
+import "./models/categories"
+import "./models/products"
+import "./models/cart"
+import "./models/User"
+import "./models/order_items"
+import "./models/orders"
+import "./models/payments"
 
 dotenv.config();
 
-const app: Application = express();
-
-// You can also sync tables:
-// sequelize.sync();
-
+const app = express();
 app.use(express.json());
 
-// Routes
-app.use("/api/users", userRouter);
-
-app.get("/", (req, res) => {
-  res.send("API is running...");
+sequelize.sync({ alter: true }).then(() => {
+  console.log("PostgreSQL DB synced successfully");
 });
-
-// Error handling
-app.use(notFound);
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

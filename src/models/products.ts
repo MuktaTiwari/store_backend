@@ -1,26 +1,34 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../config/db";
+import { Category } from "./categories";
+import { IProduct } from "../interface/productInterface";
 
-export interface IProduct extends Document {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  image_url: string;
-  category_id: mongoose.Schema.Types.ObjectId;
+
+
+interface ProductCreation extends Optional<IProduct, "id"> {}
+
+export class Product extends Model<IProduct, ProductCreation> implements IProduct {
+  public id!: number;
+  public name!: string;
+  public description!: string;
+  public price!: number;
+  public stock!: number;
+  public image_url!: string;
+  public category_id!: number;
 }
 
-const ProductSchema = new Schema(
+Product.init(
   {
-    name: { type: String, required: true },
-    description: String,
-    price: Number,
-    stock: Number,
-    image_url: String,
-
-    // Relation to Category
-    category_id: { type: Schema.Types.ObjectId, ref: "Category" },
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    name: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.TEXT, allowNull: true },  // FIXED
+    price: { type: DataTypes.DECIMAL, allowNull: false },
+    stock: { type: DataTypes.INTEGER, defaultValue: 0 },
+    image_url: { type: DataTypes.STRING },
+    category_id: { type: DataTypes.INTEGER, allowNull: false },
   },
-  { timestamps: true }
+  { sequelize, tableName: "products", timestamps: true }
 );
 
-export default mongoose.model<IProduct>("Product", ProductSchema);
+Product.belongsTo(Category, { foreignKey: "category_id" });
+Category.hasMany(Product, { foreignKey: "category_id" });

@@ -1,16 +1,25 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../config/db";
 
-export interface ICategory extends Document {
+interface CategoryAttributes {
+  id: number;
   name: string;
   description?: string;
 }
 
-const categorySchema = new Schema<ICategory>(
-  {
-    name: { type: String, required: true },
-    description: { type: String },
-  },
-  { timestamps: true }
-);
+interface CategoryCreation extends Optional<CategoryAttributes, "id"> {}
 
-export default mongoose.model<ICategory>("Category", categorySchema);
+export class Category extends Model<CategoryAttributes, CategoryCreation> implements CategoryAttributes {
+  public id!: number;
+  public name!: string;
+  public description!: string;
+}
+
+Category.init(
+  {
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    name: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.TEXT },
+  },
+  { sequelize, tableName: "categories", timestamps: true }
+);

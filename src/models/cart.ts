@@ -1,18 +1,36 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../config/db";
+import { User } from "./User";
+import { Product } from "./products";
 
-export interface ICart extends Document {
-  user_id: mongoose.Schema.Types.ObjectId;
-  product_id: mongoose.Schema.Types.ObjectId;
+interface CartAttributes {
+  id: number;
+  user_id: number;
+  product_id: number;
   quantity: number;
 }
 
-const CartSchema = new Schema(
+interface CartCreation extends Optional<CartAttributes, "id"> {}
+
+export class Cart extends Model<CartAttributes, CartCreation> implements CartAttributes {
+  public id!: number;
+  public user_id!: number;
+  public product_id!: number;
+  public quantity!: number;
+}
+
+Cart.init(
   {
-    user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-    quantity: { type: Number, required: true },
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    user_id: { type: DataTypes.INTEGER, allowNull: false },
+    product_id: { type: DataTypes.INTEGER, allowNull: false },
+    quantity: { type: DataTypes.INTEGER, defaultValue: 1 },
   },
-  { timestamps: true }
+  { sequelize, tableName: "carts", timestamps: true }
 );
 
-export default mongoose.model<ICart>("Cart", CartSchema);
+User.hasMany(Cart, { foreignKey: "user_id" });
+Cart.belongsTo(User, { foreignKey: "user_id" });
+
+Product.hasMany(Cart, { foreignKey: "product_id" });
+Cart.belongsTo(Product, { foreignKey: "product_id" });
