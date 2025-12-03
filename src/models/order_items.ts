@@ -1,31 +1,20 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/db";
+import mongoose, { Schema, Document } from "mongoose";
 
-interface OrderItemAttributes {
-  id: number;
-  order_id: number;
-  product_id: number;
+export interface IOrderItem extends Document {
+  order_id: mongoose.Schema.Types.ObjectId;
+  product_id: mongoose.Schema.Types.ObjectId;
   quantity: number;
   price: number;
 }
 
-interface OrderItemCreation extends Optional<OrderItemAttributes, "id"> {}
-
-export class OrderItem extends Model<OrderItemAttributes, OrderItemCreation> implements OrderItemAttributes {
-  public id!: number;
-  public order_id!: number;
-  public product_id!: number;
-  public quantity!: number;
-  public price!: number;
-}
-
-OrderItem.init(
+const OrderItemSchema = new Schema(
   {
-    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    order_id: DataTypes.INTEGER,
-    product_id: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER,
-    price: DataTypes.DECIMAL,
+    order_id: { type: Schema.Types.ObjectId, ref: "Order" },
+    product_id: { type: Schema.Types.ObjectId, ref: "Product" },
+    quantity: Number,
+    price: Number,
   },
-  { sequelize, tableName: "order_items" }
+  { timestamps: true }
 );
+
+export default mongoose.model<IOrderItem>("OrderItem", OrderItemSchema);

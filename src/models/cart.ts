@@ -1,28 +1,18 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/db";
+import mongoose, { Schema, Document } from "mongoose";
 
-interface CartAttributes {
-  id: number;
-  user_id: number;
-  product_id: number;
+export interface ICart extends Document {
+  user_id: mongoose.Schema.Types.ObjectId;
+  product_id: mongoose.Schema.Types.ObjectId;
   quantity: number;
 }
 
-interface CartCreation extends Optional<CartAttributes, "id"> {}
-
-export class Cart extends Model<CartAttributes, CartCreation> implements CartAttributes {
-  public id!: number;
-  public user_id!: number;
-  public product_id!: number;
-  public quantity!: number;
-}
-
-Cart.init(
+const CartSchema = new Schema(
   {
-    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    user_id: DataTypes.INTEGER,
-    product_id: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER,
+    user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+    quantity: { type: Number, required: true },
   },
-  { sequelize, tableName: "cart" }
+  { timestamps: true }
 );
+
+export default mongoose.model<ICart>("Cart", CartSchema);

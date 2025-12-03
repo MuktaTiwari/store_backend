@@ -1,31 +1,26 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/db";
+import mongoose, { Schema, Document } from "mongoose";
 
-interface OrderAttributes {
-  id: number;
-  user_id: number;
+export interface IOrder extends Document {
+  user_id: mongoose.Schema.Types.ObjectId;
   total_amount: number;
   status: string;
   payment_status: string;
+  items: mongoose.Schema.Types.ObjectId[];
 }
 
-interface OrderCreation extends Optional<OrderAttributes, "id"> {}
-
-export class Order extends Model<OrderAttributes, OrderCreation> implements OrderAttributes {
-  public id!: number;
-  public user_id!: number;
-  public total_amount!: number;
-  public status!: string;
-  public payment_status!: string;
-}
-
-Order.init(
+const OrderSchema = new Schema(
   {
-    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    user_id: DataTypes.INTEGER,
-    total_amount: DataTypes.DECIMAL,
-    status: { type: DataTypes.STRING, defaultValue: "pending" },
-    payment_status: { type: DataTypes.STRING, defaultValue: "pending" },
+    user_id: { type: Schema.Types.ObjectId, ref: "User" },
+    total_amount: Number,
+    status: { type: String, default: "pending" },
+    payment_status: { type: String, default: "pending" },
+
+    // List of order item refs
+    items: [
+      { type: Schema.Types.ObjectId, ref: "OrderItem" }
+    ],
   },
-  { sequelize, tableName: "orders" }
+  { timestamps: true }
 );
+
+export default mongoose.model<IOrder>("Order", OrderSchema);
