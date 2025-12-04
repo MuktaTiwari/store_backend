@@ -8,6 +8,7 @@ import "./models/User"
 import "./models/order_items"
 import "./models/orders"
 import "./models/payments"
+import productRouter from "./routes/productRoutes";
 
 dotenv.config();
 
@@ -17,6 +18,9 @@ app.use(express.json());
 sequelize.sync({ alter: true }).then(() => {
   console.log("PostgreSQL DB synced successfully");
 });
+
+app.use("/api/products", productRouter);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

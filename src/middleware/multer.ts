@@ -1,8 +1,8 @@
+// middleware/upload.ts
 import multer from "multer";
 
-// Only memory storage is needed for streamifier upload
+// Store in memory for Cloudinary upload
 const storage = multer.memoryStorage();
-
 const upload = multer({ storage });
 
 export default upload;

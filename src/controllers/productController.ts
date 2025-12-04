@@ -7,21 +7,20 @@ export class ProductController {
   public async getAllProduct(req: Request, res: Response) {
     try {
       const products = await this.productService.getAllProduct();
-      return res.status(200).json(products);
+      res.json(products);
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Server Error", error });
+      res.status(500).json({ message: (error as Error).message });
     }
   }
 
   public async createProduct(req: Request, res: Response) {
     try {
-      const requestData = req.body;
-      const productResponse = await this.productService.createProduct(requestData);
-      return res.status(201).json(productResponse);
+      const file = req.file;
+      const data = req.body;
+      const product = await this.productService.createProduct(data, file);
+      res.json(product);
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Server Error", error });
+      res.status(500).json({ message: (error as Error).message });
     }
   }
 }
