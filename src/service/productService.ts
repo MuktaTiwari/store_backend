@@ -15,7 +15,10 @@ export class ProductService {
     }
   }
 
-  public async createProduct(requestData: IProduct, file?: Express.Multer.File): Promise<IProduct> {
+  public async createProduct(
+    requestData: IProduct,
+    file?: Express.Multer.File
+  ): Promise<IProduct> {
     try {
       let imageUrl = "";
 
@@ -43,6 +46,22 @@ export class ProductService {
     } catch (error) {
       console.error("Product creation error:", error);
       throw new Error("Failed to create product");
+    }
+  }
+
+  public async deleteProduct(id: string) {
+    try {
+      const response = await this.productModel.destroy({
+        where: { id },
+      });
+
+      if (response === 0) {
+        throw new Error("Product not found");
+      }
+
+      return response;
+    } catch (error) {
+      throw new Error("Failed to delete product");
     }
   }
 }

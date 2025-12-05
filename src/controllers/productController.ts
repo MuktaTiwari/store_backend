@@ -23,4 +23,14 @@ export class ProductController {
       res.status(500).json({ message: (error as Error).message });
     }
   }
+
+  public async deleteProduct(req: Request, res: Response) {
+    try {
+      const productId = req.params.id;
+      const response = await this.productService.deleteProduct(productId);
+      res.json(response);
+    } catch (error) {
+      res.status(500).json({ message: (error as Error).message });
+    }
+  }
 }
