@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME || "store_backend",
+  process.env.DB_NAME || "storebackend",
   process.env.DB_USER || "postgres",
   process.env.DB_PASSWORD || "postgres",
   {
@@ -12,6 +12,8 @@ const sequelize = new Sequelize(
     dialect: "postgres",
     logging: false,
   }
+
 );
+console.log("HFEIUfjbewiuf", process.env.DB_PASSWORD )
 
 export default sequelize;

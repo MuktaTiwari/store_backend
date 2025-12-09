@@ -19,7 +19,7 @@ sequelize.sync({ alter: true }).then(() => {
   console.log("PostgreSQL DB synced successfully");
 });
 
-app.use("/api/products", productRouter);
+app.use("/api", productRouter);
 
 
 const PORT = process.env.PORT || 5000;

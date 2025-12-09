@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
-import { Order } from "./orders";
 
 interface PaymentAttributes {
   id: number;
@@ -25,14 +24,11 @@ export class Payment extends Model<PaymentAttributes, PaymentCreation> implement
 Payment.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    order_id: { type: DataTypes.INTEGER, allowNull: false },
-    payment_method: { type: DataTypes.STRING },
-    status: { type: DataTypes.STRING },
-    transaction_id: { type: DataTypes.STRING },
-    amount: { type: DataTypes.DECIMAL },
+    order_id: DataTypes.INTEGER,
+    payment_method: DataTypes.STRING,
+    status: DataTypes.STRING,
+    transaction_id: DataTypes.STRING,
+    amount: DataTypes.DECIMAL,
   },
-  { sequelize, tableName: "payments", timestamps: true }
+  { sequelize, tableName: "payments" }
 );
-
-Order.hasOne(Payment, { foreignKey: "order_id" });
-Payment.belongsTo(Order, { foreignKey: "order_id" });
