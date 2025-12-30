@@ -5,7 +5,7 @@ import { ProductController } from "../controllers/productController";
 const router = Router();
 const productController = new ProductController();
 
-router.get("/products", productController.getAllProduct.bind(productController));
+router.get("/", productController.getAllProduct.bind(productController));
 router.post(
   "/products",
   upload.single("image"), // Name of your file field in FormData
