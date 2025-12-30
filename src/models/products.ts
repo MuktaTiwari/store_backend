@@ -23,7 +23,7 @@ Product.init(
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT, allowNull: true },  // FIXED
     price: { type: DataTypes.DECIMAL, allowNull: false },
-    stock: { type: DataTypes.INTEGER, defaultValue: 0 },
+    stock: { type: DataTypes.STRING, allowNull:true },
     image_url: { type: DataTypes.STRING },
     category_id: { type: DataTypes.INTEGER, allowNull: false },
   },
