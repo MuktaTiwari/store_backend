@@ -1,15 +1,9 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
 
-interface CategoryAttributes {
-  id: number;
-  name: string;
-  description?: string;
-}
+interface CategoryCreation extends Optional<ICategoryAttributes, "id"> {}
 
-interface CategoryCreation extends Optional<CategoryAttributes, "id"> {}
-
-export class Category extends Model<CategoryAttributes, CategoryCreation> implements CategoryAttributes {
+export class Category extends Model<ICategoryAttributes, CategoryCreation> implements ICategoryAttributes {
   public id!: number;
   public name!: string;
   public description!: string;

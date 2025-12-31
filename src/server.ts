@@ -10,7 +10,7 @@ import "./models/orders"
 import "./models/payments"
 import productRouter from "./routes/productRoutes";
 import cors from "cors"
-
+import categoryRoutes from "./routes/categoryRoutes"
 dotenv.config();
 
 const app = express();
@@ -26,6 +26,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use("/api/products", productRouter);
+app.use("/api/category", categoryRoutes)
 
 
 const PORT = process.env.PORT || 5000;
