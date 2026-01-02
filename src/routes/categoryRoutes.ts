@@ -6,7 +6,7 @@ const categoryController = new CategoryContoller();
 
 router.get("/", categoryController.getALlCategory.bind(categoryController));
 
-router.post("/category", categoryController.createCategory.bind(categoryController));
+router.post("/add", categoryController.createCategory.bind(categoryController));
 
 router.delete("/:id", categoryController.deleteCategory);
 

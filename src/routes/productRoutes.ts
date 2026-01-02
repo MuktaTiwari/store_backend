@@ -7,9 +7,11 @@ const productController = new ProductController();
 
 router.get("/", productController.getAllProduct.bind(productController));
 router.post(
-  "/products",
+  "/create",
   upload.single("image"), // Name of your file field in FormData
   productController.createProduct.bind(productController)
 );
+
+router.delete("/:id", productController.deleteProduct);
 
 export default router;
